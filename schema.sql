@@ -7,6 +7,14 @@
 -- Fitur: Enterprise RBAC Table + Prompt Injection & Security Defense Suite
 -- ============================================================================
 
+-- DROP TABLES (Urutan drop dari child ke parent untuk menghindari foreign key conflict)
+DROP TABLE IF EXISTS Late_Fee_Penalties;
+DROP TABLE IF EXISTS Payments_Received;
+DROP TABLE IF EXISTS Payment_Schedules;
+DROP TABLE IF EXISTS Sales_Contracts;
+DROP TABLE IF EXISTS Units;
+DROP TABLE IF EXISTS System_Users;
+
 -- 0. SECURITY & RBAC TABLE: SYSTEM_USERS
 CREATE TABLE System_Users (
     UserID INT PRIMARY KEY,
@@ -141,16 +149,16 @@ INSERT INTO Sales_Contracts (ContractID, ContractNumber, UnitID, CustomerName, C
 (105, 'CTR-SC-2026-005', 10, 'Ahmad Farhan',      '3174066611120005', 102, '2026-03-05', 650000000.00,   71500000.00,  721500000.00,  'KPR Express',     'Active'),
 (106, 'CTR-SC-2026-006', 11, 'Christine Hartono', '3173022233340006', 103, '2026-01-15', 2300000000.00, 253000000.00, 2553000000.00, 'Installment 24x', 'Active');
 
--- 3. PAYMENT SCHEDULES (19 Termin Tagihan)
+-- 3. PAYMENT SCHEDULES (Termin Tagihan)
 INSERT INTO Payment_Schedules (ScheduleID, ContractID, InstallmentNo, DueDate, BillingAmount, BillingType, Status) VALUES 
 -- Kontrak 101 (Budi Santoso - Installment 24x)
 (1001, 101, 1, '2026-02-10', 50000000.00,  'Booking Fee',          'Paid'),
 (1002, 101, 2, '2026-03-10', 40000000.00,  'Monthly Installment',   'Partially Paid'),
 (1003, 101, 3, '2026-04-10', 40000000.00,  'Monthly Installment',   'Unpaid'),
 
--- Kontrak 102 (Siti Rahma - KPR Express)
+-- Kontrak 102 (Siti Rahma - KPR Express: Pencairan KPR Bank di masa depan 2027)
 (1005, 102, 1, '2026-02-20', 100000000.00, 'Down Payment',         'Paid'),
-(1006, 102, 2, '2026-05-20', 1454000000.00,'Bank Disbursement',    'Unpaid'),
+(1006, 102, 2, '2027-12-20', 1454000000.00,'Bank Disbursement',    'Unpaid'),
 
 -- Kontrak 103 (Robert Tan - Hard Cash)
 (1007, 103, 1, '2026-01-25', 50000000.00,  'Booking Fee',          'Paid'),
@@ -164,7 +172,7 @@ INSERT INTO Payment_Schedules (ScheduleID, ContractID, InstallmentNo, DueDate, B
 -- Kontrak 105 (Ahmad Farhan - KPR Express: DP 2x, DP 2 telat bayar)
 (1012, 105, 1, '2026-03-10', 30000000.00,  'Booking Fee',          'Paid'),
 (1013, 105, 2, '2026-04-10', 50000000.00,  'Down Payment',         'Partially Paid'),
-(1014, 105, 3, '2026-07-10', 641500000.00, 'Bank Disbursement',    'Unpaid'),
+(1014, 105, 3, '2027-12-10', 641500000.00, 'Bank Disbursement',    'Unpaid'),
 
 -- Kontrak 106 (Christine Hartono - Installment 24x: Denda sudah dilunasi)
 (1015, 106, 1, '2026-01-20', 50000000.00,  'Booking Fee',          'Paid'),
